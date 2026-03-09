@@ -16,8 +16,8 @@ import { loadPersistence } from '@/lib/persistence';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// Hard-coded timeout limit for API responses (175 seconds)
-const API_RESPONSE_TIMEOUT_MS = 175000; // 175 seconds
+// Hard-coded timeout limit for API responses (120 seconds)
+const API_RESPONSE_TIMEOUT_MS = 120000; // 120 seconds
 
 type Message = {
   messageId: string;
@@ -93,11 +93,11 @@ const handleEmitterEvents = async (
   let writerClosed = false;
   let timeoutId: NodeJS.Timeout;
 
-  // Set up timeout to force close after 175 seconds
+  // Set up timeout to force close after 120 seconds
   timeoutId = setTimeout(() => {
     if (!writerClosed) {
       console.log(`[Chat Timeout] Forcing stream closure after ${API_RESPONSE_TIMEOUT_MS / 1000}s`);
-      
+
       // Send timeout notification
       try {
         writer.write(
@@ -110,8 +110,8 @@ const handleEmitterEvents = async (
               timeout: API_RESPONSE_TIMEOUT_MS,
             }) + '\n',
           ),
-        ).catch(() => {});
-        
+        ).catch(() => { });
+
         writer.write(
           encoder.encode(
             JSON.stringify({
@@ -121,15 +121,15 @@ const handleEmitterEvents = async (
             }) + '\n',
           ),
         ).then(() => {
-          writer.close().catch(() => {});
-        }).catch(() => {});
+          writer.close().catch(() => { });
+        }).catch(() => { });
       } catch (error) {
         // Writer already closed
       }
-      
+
       writerClosed = true;
       stream.removeAllListeners();
-      
+
       // Save partial message to database
       if (recievedMessage) {
         void (async () => {
@@ -158,7 +158,7 @@ const handleEmitterEvents = async (
 
   stream.on('data', (data) => {
     if (writerClosed) return;
-    
+
     try {
       const parsedData = JSON.parse(data);
       if (parsedData.type === 'response') {
@@ -196,10 +196,10 @@ const handleEmitterEvents = async (
       console.error('Error processing stream data:', error);
     }
   });
-  
+
   stream.on('end', () => {
     clearTimeout(timeoutId); // Clear timeout if stream ends normally
-    
+
     if (!writerClosed) {
       try {
         writer.write(
@@ -250,7 +250,7 @@ const handleEmitterEvents = async (
   });
   stream.on('error', (data) => {
     clearTimeout(timeoutId); // Clear timeout on error
-    
+
     if (!writerClosed) {
       try {
         const errorMessage = getStreamErrorMessage(data);
@@ -373,14 +373,14 @@ export const POST = async (req: Request) => {
       // Use default configured models
       const chatModelProvider =
         chatModelProviders[
-          body.chatModel?.provider || Object.keys(chatModelProviders)[0]
+        body.chatModel?.provider || Object.keys(chatModelProviders)[0]
         ];
       const chatModel =
         chatModelProvider?.[
-          getRequestedModelKey(body.chatModel) ||
-            Object.keys(chatModelProvider || {})[0]
+        getRequestedModelKey(body.chatModel) ||
+        Object.keys(chatModelProvider || {})[0]
         ];
-      
+
       if (chatModelProvider && chatModel) {
         llm = chatModel.model;
       }
@@ -421,7 +421,7 @@ export const POST = async (req: Request) => {
     let embeddings: Embeddings | null = null;
     if (body.optimizationMode === 'balanced') {
       const embeddingProviders = await getAvailableEmbeddingModelProviders();
-      
+
       // Try to get the first available embedding model from system configuration
       for (const provider of Object.keys(embeddingProviders)) {
         const models = embeddingProviders[provider];

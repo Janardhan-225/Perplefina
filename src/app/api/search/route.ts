@@ -31,8 +31,8 @@ interface ChatRequestBody {
   includeVideos?: boolean;
 }
 
-// Hard-coded timeout limit for API responses (175 seconds)
-const API_RESPONSE_TIMEOUT_MS = 175000; // 175 seconds
+// Hard-coded timeout limit for API responses (120 seconds)
+const API_RESPONSE_TIMEOUT_MS = 120000; // 120 seconds
 
 const getRequestedModelKey = (chatModel?: chatModel) =>
   chatModel?.model || chatModel?.name;
