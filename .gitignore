@@ -40,3 +40,5 @@ db.sqlite
 
 certificates
 /.claude
+
+.vercel

@@ -257,3 +257,4 @@ Perplefina runs on Next.js and handles all API requests. It works right away on 
 ## Credits
 
 Perplefina is based on the excellent [Perplexica](https://github.com/ItzCrazyKns/Perplexica) project by ItzCrazyKns, modified and enhanced for the Trading Goose Multi-LLM Agent Portfolio Management System.
+"# Perplefina" 
