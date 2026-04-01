@@ -32,4 +32,5 @@ API_KEY = "" # Required to use AI/ML API chat and embedding models
 API_URL = "" # LM Studio API URL - http://host.docker.internal:1234
 
 [API_ENDPOINTS]
-SEARXNG = "" # Base SearxNG URL - http://localhost:32768 (optional if SEARXNG_API_URL is set in .env; do not include /search)
+SEARXNG = "https://searx.be"
+# Base SearxNG URL - http://localhost:32768 (optional if SEARXNG_API_URL is set in .env; do not include /search)
